@@ -1,20 +1,31 @@
 import { HabbitTime } from './habbitTime';
 import { InvalidHabbitFrequency } from './error/invalidHabbitFrequency.error';
 import { InvalidHabbitDuration } from './error/invalidHabbitDuration.error';
+import { RequiredHabbitAttribute } from './requiredHabbitAttribute';
+import { InvalidHabbitDataError } from './error/incompleteHabbitData.error';
 
-export class HabbitFrquency {
+export class HabbitFrequency extends RequiredHabbitAttribute {
   private constructor(
     private readonly type: FrequencyType,
     private readonly amount: number,
     private time: HabbitTime,
-  ) {}
+  ) {
+    super();
+    if (!this.isValid(type)) {
+      throw InvalidHabbitDataError.withAttribute('type');
+    }
+
+    if (!this.isValid(amount)) {
+      throw InvalidHabbitDataError.withAttribute('amount');
+    }
+  }
 
   public static create(
     type: string,
     amount: number,
     completionTime: number,
     restTime: number,
-  ): HabbitFrquency {
+  ): HabbitFrequency {
     const frequencyType = frequencyTypeFromValue(type) || null;
     const time = HabbitTime.create(completionTime, restTime);
 
@@ -34,7 +45,7 @@ export class HabbitFrquency {
       );
     }
 
-    return new HabbitFrquency(frequencyType, amount, time);
+    return new HabbitFrequency(frequencyType, amount, time);
   }
 
   public toPrimitives() {

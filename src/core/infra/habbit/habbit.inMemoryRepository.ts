@@ -9,7 +9,7 @@ export class HabbitInMemoryRepository implements HabbitRepository {
     this.habbits.push(user);
   }
 
-  findByHabbitName(name: string): Habbit | undefined {
+  findByName(name: string): Habbit | undefined {
     return this.habbits.find((habbit) =>
       habbit.name.equals(HabbitName.create(name)),
     );

@@ -1,15 +1,16 @@
-import { HabbitFrquency } from './habbitFrequency';
+import { HabbitFrequency } from './habbitFrequency';
 import { HabbitDescription } from './habbitDescription';
 import { HabbitId } from './habbitId';
 import { HabbitName } from './habbitName';
+import { HabbitUserId } from './habbitUserId';
 
 export class Habbit {
   private constructor(
     readonly id: HabbitId,
     readonly name: HabbitName,
     readonly description: HabbitDescription,
-    readonly frequency: HabbitFrquency,
-    readonly userId: string,
+    readonly frequency: HabbitFrequency,
+    readonly userId: HabbitUserId,
     readonly creationDate: Date,
     readonly updateDate: Date,
   ) {}
@@ -28,13 +29,13 @@ export class Habbit {
       HabbitId.create(id),
       HabbitName.create(name),
       HabbitDescription.create(description),
-      HabbitFrquency.create(
+      HabbitFrequency.create(
         frequencyType,
         frequencyAmount,
         completionTime,
         restTime,
       ),
-      userId,
+      HabbitUserId.create(userId),
       new Date(),
       new Date(),
     );
@@ -58,7 +59,7 @@ export class Habbit {
       frequencyAmount: this.frequency.toPrimitives().amount,
       completionTime: this.frequency.toPrimitives().completionTime,
       restTime: this.frequency.toPrimitives().restTime,
-      userId: this.userId,
+      userId: this.userId.toPrimitives(),
     };
   }
 }

@@ -1,5 +1,5 @@
 import { Response } from 'express';
-import { UserAlreadyExistsError } from '../../application/user/userAlreadyExists.error';
+import { UserAlreadyExistsError } from '../../application/user/registerUser/error/userAlreadyExists.error';
 import { BaseError } from '../../domain/error/baseError';
 
 export class ErrorResponse {

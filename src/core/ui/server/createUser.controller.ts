@@ -1,8 +1,8 @@
 import { Body, Controller, Post, Res } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 import { Response } from 'express';
-import { RegisterUserCommandHandler } from '../../application/user/registerUser.commandHandler';
-import { RegisterUserCommand } from '../../application/user/registerUser.command';
+import { RegisterUserCommandHandler } from '../../application/user/registerUser/registerUser.commandHandler';
+import { RegisterUserCommand } from '../../application/user/registerUser/registerUser.command';
 import { catchError } from './errorHandler';
 
 export class CreateUserDto {

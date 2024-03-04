@@ -1,4 +1,4 @@
-import { BaseError } from '../../domain/error/baseError';
+import { BaseError } from '../../../../domain/error/baseError';
 
 export class UserAlreadyExistsError extends BaseError {
   private constructor(message: string) {

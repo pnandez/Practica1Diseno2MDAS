@@ -1,5 +1,13 @@
-export class HabbitName {
-  private constructor(private readonly name: string) {}
+import { InvalidHabbitDataError } from './error/incompleteHabbitData.error';
+import { RequiredHabbitAttribute } from './requiredHabbitAttribute';
+
+export class HabbitName extends RequiredHabbitAttribute {
+  private constructor(private readonly name: string) {
+    super();
+    if (!this.isValid(name)) {
+      throw InvalidHabbitDataError.withAttribute('name');
+    }
+  }
 
   public static create(name: string): HabbitName {
     return new HabbitName(name);

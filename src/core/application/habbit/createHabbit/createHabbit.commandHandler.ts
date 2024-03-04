@@ -1,8 +1,9 @@
-import { Habbit } from '../../domain/habbit/habbit';
-import { HabbitRepository } from '../../domain/habbit/habbit.repository';
-import { UserRepository } from '../../domain/user/user.repository';
-import { UserNotFoundError } from '../user/error/userNotFound.error';
+import { Habbit } from '../../../domain/habbit/habbit';
+import { HabbitRepository } from '../../../domain/habbit/habbit.repository';
+import { UserRepository } from '../../../domain/user/user.repository';
+import { UserNotFoundError } from '../../user/registerUser/error/userNotFound.error';
 import { CreateHabbitCommand } from './createHabbit.command';
+import { HabbitAlreadyExistsError } from './error/habbitAlreadyExists.error';
 
 export class CreateHabbitCommandHandler {
   constructor(
@@ -13,6 +14,10 @@ export class CreateHabbitCommandHandler {
   handle(command: CreateHabbitCommand): void {
     if (!this.userRepository.findById(command.userId)) {
       throw UserNotFoundError.withId(command.userId);
+    }
+
+    if (this.repository.findByName(command.name)) {
+      throw HabbitAlreadyExistsError.withName(command.name);
     }
 
     this.repository.save(

@@ -1,8 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { UserRepository } from '../../domain/user/user.repository';
-import { User } from '../../domain/user/user';
+import { UserRepository } from '../../../domain/user/user.repository';
+import { User } from '../../../domain/user/user';
 import { RegisterUserCommand } from './registerUser.command';
-import { UserAlreadyExistsError } from './userAlreadyExists.error';
+import { UserAlreadyExistsError } from './error/userAlreadyExists.error';
 
 @Injectable()
 export class RegisterUserCommandHandler {

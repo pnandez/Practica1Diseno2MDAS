@@ -1,6 +1,7 @@
 import { Habbit } from '../../domain/habbit/habbit';
 import { HabbitRepository } from '../../domain/habbit/habbit.repository';
 import { HabbitName } from '../../domain/habbit/habbitName';
+import { HabbitUserId } from '../../domain/habbit/habbitUserId';
 
 export class HabbitInMemoryRepository implements HabbitRepository {
   habbits: Habbit[] = [];
@@ -17,6 +18,12 @@ export class HabbitInMemoryRepository implements HabbitRepository {
 
   findById(id: string): Habbit {
     return this.habbits.find((habbit) => habbit.id.equals(id));
+  }
+
+  findAllByUserId(userId: string): Habbit[] {
+    return this.habbits.filter((habbit) =>
+      habbit.userId.equals(HabbitUserId.create(userId)),
+    );
   }
 
   withHabbits(habbits: Habbit[]) {

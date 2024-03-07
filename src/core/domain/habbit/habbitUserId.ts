@@ -13,6 +13,10 @@ export class HabbitUserId extends RequiredHabbitAttribute {
     return new HabbitUserId(userId);
   }
 
+  equals(other: HabbitUserId): boolean {
+    return this.userId === other.userId;
+  }
+
   toPrimitives() {
     return this.userId;
   }

@@ -50,8 +50,8 @@ export class HabbitFrequency extends RequiredHabbitAttribute {
 
   public toPrimitives() {
     return {
-      type: this.type,
-      amount: this.amount,
+      frequencyType: this.type,
+      frequencyAmount: this.amount,
       completionTime: this.time.toPrimitives().completionTime,
       restTime: this.time.toPrimitives().restTime,
     };

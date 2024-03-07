@@ -1,5 +1,5 @@
 export abstract class RequiredHabbitAttribute {
-  isValid(value: any): boolean {
-    return value !== undefined && value !== null;
+  isNullOrUndefined(value: any): boolean {
+    return value === undefined || value === null;
   }
 }

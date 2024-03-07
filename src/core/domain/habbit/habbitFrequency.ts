@@ -11,11 +11,11 @@ export class HabbitFrequency extends RequiredHabbitAttribute {
     private time: HabbitTime,
   ) {
     super();
-    if (!this.isValid(type)) {
+    if (this.isNullOrUndefined(type)) {
       throw InvalidHabbitDataError.withAttribute('type');
     }
 
-    if (!this.isValid(amount)) {
+    if (this.isNullOrUndefined(amount)) {
       throw InvalidHabbitDataError.withAttribute('amount');
     }
   }

@@ -3,8 +3,11 @@ import { HabbitDescription } from './habbitDescription';
 import { HabbitId } from './habbitId';
 import { HabbitName } from './habbitName';
 import { HabbitUserId } from './habbitUserId';
+import { HabbitProgressRecord } from './habbitProgressRecord';
 
 export class Habbit {
+  private progressRecords: HabbitProgressRecord[];
+
   private constructor(
     readonly id: HabbitId,
     readonly name: HabbitName,
@@ -13,7 +16,15 @@ export class Habbit {
     readonly userId: HabbitUserId,
     readonly creationDate: Date,
     readonly updateDate: Date,
-  ) {}
+  ) {
+    this.progressRecords = [];
+  }
+
+  recordProgress(date: number, observations: string): void {
+    const record = HabbitProgressRecord.create(date, observations);
+
+    this.progressRecords.push(record);
+  }
 
   public static create(
     id: string,
@@ -50,16 +61,17 @@ export class Habbit {
     completionTime: number;
     restTime: number;
     userId: string;
+    progressRecords: { date: number; observations: string }[];
   } {
     return {
       id: this.id.toPrimitives(),
       name: this.name.toPrimitives(),
       description: this.description.toPrimitives(),
-      frequencyType: this.frequency.toPrimitives().type,
-      frequencyAmount: this.frequency.toPrimitives().amount,
-      completionTime: this.frequency.toPrimitives().completionTime,
-      restTime: this.frequency.toPrimitives().restTime,
+      ...this.frequency.toPrimitives(),
       userId: this.userId.toPrimitives(),
+      progressRecords: this.progressRecords.map((record) =>
+        record.toPrimitives(),
+      ),
     };
   }
 }

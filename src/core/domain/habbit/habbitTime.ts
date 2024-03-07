@@ -7,10 +7,10 @@ export class HabbitTime extends RequiredHabbitAttribute {
     private readonly restTime: number,
   ) {
     super();
-    if (!this.isValid(completionTime)) {
+    if (this.isNullOrUndefined(completionTime)) {
       throw InvalidHabbitDataError.withAttribute('completionTime');
     }
-    if (!this.isValid(restTime)) {
+    if (this.isNullOrUndefined(restTime)) {
       throw InvalidHabbitDataError.withAttribute('restTime');
     }
   }

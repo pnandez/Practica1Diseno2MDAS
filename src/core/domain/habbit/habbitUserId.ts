@@ -4,7 +4,7 @@ import { RequiredHabbitAttribute } from './requiredHabbitAttribute';
 export class HabbitUserId extends RequiredHabbitAttribute {
   private constructor(readonly userId: string) {
     super();
-    if (!this.isValid(userId)) {
+    if (this.isNullOrUndefined(userId)) {
       throw InvalidHabbitDataError.withAttribute('userId');
     }
   }

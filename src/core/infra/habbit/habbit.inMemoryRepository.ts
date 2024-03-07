@@ -1,3 +1,4 @@
+import { HabbitNotFoundError } from '../../domain/habbit/error/habbitNotfFound.Error';
 import { Habbit } from '../../domain/habbit/habbit';
 import { HabbitRepository } from '../../domain/habbit/habbit.repository';
 import { HabbitName } from '../../domain/habbit/habbitName';
@@ -18,6 +19,16 @@ export class HabbitInMemoryRepository implements HabbitRepository {
 
   findById(id: string): Habbit {
     return this.habbits.find((habbit) => habbit.id.equals(id));
+  }
+
+  findByIdOrException(id: string): Habbit {
+    const habbit = this.habbits.find((habbit) => habbit.id.equals(id));
+
+    if (!habbit) {
+      throw HabbitNotFoundError.withHabbitId(id);
+    }
+
+    return habbit;
   }
 
   findAllByUserId(userId: string): Habbit[] {

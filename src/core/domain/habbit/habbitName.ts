@@ -3,8 +3,8 @@ import { RequiredHabbitAttribute } from './requiredHabbitAttribute';
 
 export class HabbitName extends RequiredHabbitAttribute {
   private constructor(private readonly name: string) {
-    super();
-    if (!this.isValid(name)) {
+    super();    
+    if (this.isNullOrUndefined(name)) {
       throw InvalidHabbitDataError.withAttribute('name');
     }
   }

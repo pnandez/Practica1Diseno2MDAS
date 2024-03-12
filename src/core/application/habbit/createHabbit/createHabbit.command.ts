@@ -8,6 +8,8 @@ export class CreateHabbitCommand {
     readonly completionTime: number,
     readonly restTime: number,
     readonly userId: string,
+    readonly habbitDeviceId?: string,
+    readonly habbitDeviceType?: number,
   ) {}
 
   public static fromObject(params: {
@@ -19,6 +21,8 @@ export class CreateHabbitCommand {
     completionTime: number;
     restTime: number;
     userId: string;
+    habbitDeviceId?: string;
+    habbitDeviceType?: number;
   }) {
     return new CreateHabbitCommand(
       params.id,

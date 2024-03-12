@@ -1,4 +1,4 @@
-import { UserInMemoryRepository } from '../../../infra/user.inMemoryRepository';
+import { UserInMemoryRepository } from '../../../infra/repository/user/user.inMemoryRepository';
 import { UserMother } from '../../../test/user/userMother';
 import { RegisterUserCommand } from './registerUser.command';
 import { RegisterUserCommandHandler } from './registerUser.commandHandler';

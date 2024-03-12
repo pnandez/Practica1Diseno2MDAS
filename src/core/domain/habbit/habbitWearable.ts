@@ -1,5 +1,14 @@
 export abstract class HabbitWearable {
-  constructor(readonly deviceId: string) {}
+  protected constructor(
+    readonly deviceId: string,
+    readonly manufacturer: number,
+  ) {}
 
-  abstract validateProgress(date: number);
+  toPrimitives() {
+    return {
+      wearableDeviceId: this.deviceId,
+    };
+  }
+
+  abstract isProgressValid(date: number);
 }

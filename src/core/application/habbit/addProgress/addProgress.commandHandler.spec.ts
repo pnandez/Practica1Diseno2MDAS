@@ -1,7 +1,7 @@
 import { InvalidProgressRecord } from '../../../domain/habbit/error/invalidProgressRecord.error';
 import { Habbit } from '../../../domain/habbit/habbit';
-import { HabbitInMemoryRepository } from '../../../infra/habbit/habbit.inMemoryRepository';
-import { UserInMemoryRepository } from '../../../infra/user.inMemoryRepository';
+import { HabbitInMemoryRepository } from '../../../infra/repository/habbit/habbit.inMemoryRepository';
+import { UserInMemoryRepository } from '../../../infra/repository/user/user.inMemoryRepository';
 import { HabbitMother } from '../../../test/habbit/habbitMother';
 import { AddProgressCommand } from './addProgress.command';
 import { AddProgressCommandHandler } from './addProgress.commandHandler';

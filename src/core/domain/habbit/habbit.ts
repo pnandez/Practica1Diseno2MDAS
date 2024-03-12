@@ -4,6 +4,7 @@ import { HabbitId } from './habbitId';
 import { HabbitName } from './habbitName';
 import { HabbitUserId } from './habbitUserId';
 import { HabbitProgressRecord } from './habbitProgressRecord';
+import { HabbitWearable } from './habbitWearable';
 
 export class Habbit {
   readonly progressRecords: HabbitProgressRecord[];
@@ -14,6 +15,7 @@ export class Habbit {
     readonly description: HabbitDescription,
     readonly frequency: HabbitFrequency,
     readonly userId: HabbitUserId,
+    readonly habbitWearable: HabbitWearable,
     readonly creationDate: Date,
     readonly updateDate: Date,
   ) {
@@ -21,7 +23,11 @@ export class Habbit {
   }
 
   recordProgress(date: number, observations: string): void {
-    const record = HabbitProgressRecord.create(date, observations);
+    const record = HabbitProgressRecord.create(
+      date,
+      observations,
+      this.habbitWearable?.isProgressValid(date) ?? false,
+    );
 
     this.progressRecords.push(record);
   }
@@ -35,6 +41,7 @@ export class Habbit {
     completionTime: number,
     restTime: number,
     userId: string,
+    habbitWearable?: HabbitWearable,
   ): Habbit {
     return new Habbit(
       HabbitId.create(id),
@@ -47,6 +54,7 @@ export class Habbit {
         restTime,
       ),
       HabbitUserId.create(userId),
+      habbitWearable,
       new Date(),
       new Date(),
     );
@@ -69,6 +77,7 @@ export class Habbit {
       description: this.description.toPrimitives(),
       ...this.frequency.toPrimitives(),
       userId: this.userId.toPrimitives(),
+      ...this.habbitWearable?.toPrimitives(),
       progressRecords: this.progressRecords.map((record) =>
         record.toPrimitives(),
       ),

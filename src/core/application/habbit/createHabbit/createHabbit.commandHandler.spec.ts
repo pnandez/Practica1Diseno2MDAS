@@ -1,6 +1,7 @@
 import { Habbit } from '../../../domain/habbit/habbit';
-import { HabbitInMemoryRepository } from '../../../infra/habbit/habbit.inMemoryRepository';
-import { UserInMemoryRepository } from '../../../infra/user.inMemoryRepository';
+import { HabbitInMemoryRepository } from '../../../infra/repository/habbit/habbit.inMemoryRepository';
+import { UserInMemoryRepository } from '../../../infra/repository/user/user.inMemoryRepository';
+import { WearableManufacturer } from '../../../infra/wearable/manufacturer.values';
 import { HabbitMother } from '../../../test/habbit/habbitMother';
 import { UserMother } from '../../../test/user/userMother';
 import { CreateHabbitCommand } from './createHabbit.command';
@@ -12,27 +13,41 @@ describe('CreateHabbitCommandHandler should', () => {
     const userRepository = new UserInMemoryRepository();
     const handler = new CreateHabbitCommandHandler(repository, userRepository);
     const user = new UserMother().build();
-    const createdHabbit = new HabbitMother().withUserId(user.id).build();
+    const baseHabbit = new HabbitMother().withUserId(user.id).build();
     userRepository.save(user);
-    return { handler, repository, userRepository, user, createdHabbit };
+    return { handler, repository, userRepository, user, baseHabbit };
   };
 
   it('should create a habbit', () => {
-    const { handler, repository, createdHabbit } = prepareScenario();
+    const { handler, repository, baseHabbit } = prepareScenario();
 
-    const createHabbitCommand = createCommandFromHabbit(createdHabbit);
+    const createHabbitCommand = createCommandFromHabbit(baseHabbit);
 
     handler.handle(createHabbitCommand);
 
-    expect(repository.isHabbitSaved(createdHabbit)).toBeTruthy();
+    expect(repository.isHabbitSaved(baseHabbit)).toBeTruthy();
+  });
+
+  it('should create a habbit with garmin wearable', () => {
+    const { handler, repository, baseHabbit } = prepareScenario();
+
+    const createHabbitCommand = createCommandFromHabbit(
+      baseHabbit,
+      'garminDevice1234',
+      WearableManufacturer.GARMIN,
+    );
+
+    handler.handle(createHabbitCommand);
+
+    expect(repository.isHabbitSaved(baseHabbit)).toBeTruthy();
   });
 
   it('throw error when habbit name already exists', () => {
-    const { handler, repository, createdHabbit } = prepareScenario();
+    const { handler, repository, baseHabbit: baseHabbit } = prepareScenario();
 
-    repository.save(createdHabbit);
+    repository.save(baseHabbit);
 
-    const createHabbitCommand = createCommandFromHabbit(createdHabbit);
+    const createHabbitCommand = createCommandFromHabbit(baseHabbit);
 
     expect(() => handler.handle(createHabbitCommand)).toThrow();
   });
@@ -57,6 +72,14 @@ describe('CreateHabbitCommandHandler should', () => {
   });
 });
 
-function createCommandFromHabbit(habbit: Habbit) {
-  return CreateHabbitCommand.fromObject(habbit.toPrimitives());
+function createCommandFromHabbit(
+  habbit: Habbit,
+  habbitDeviceId?: string,
+  habbitDeviceType?: number,
+) {
+  return CreateHabbitCommand.fromObject({
+    ...habbit.toPrimitives(),
+    habbitDeviceId,
+    habbitDeviceType,
+  });
 }

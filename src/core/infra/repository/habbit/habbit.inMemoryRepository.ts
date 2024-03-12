@@ -1,8 +1,8 @@
-import { HabbitNotFoundError } from '../../domain/habbit/error/habbitNotfFound.Error';
-import { Habbit } from '../../domain/habbit/habbit';
-import { HabbitRepository } from '../../domain/habbit/habbit.repository';
-import { HabbitName } from '../../domain/habbit/habbitName';
-import { HabbitUserId } from '../../domain/habbit/habbitUserId';
+import { HabbitNotFoundError } from '../../../domain/habbit/error/habbitNotfFound.Error';
+import { Habbit } from '../../../domain/habbit/habbit';
+import { HabbitRepository } from '../../../domain/habbit/habbit.repository';
+import { HabbitName } from '../../../domain/habbit/habbitName';
+import { HabbitUserId } from '../../../domain/habbit/habbitUserId';
 
 export class HabbitInMemoryRepository implements HabbitRepository {
   private habbits: Habbit[] = [];

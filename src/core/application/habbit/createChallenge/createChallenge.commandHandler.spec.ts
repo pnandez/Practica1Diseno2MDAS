@@ -1,5 +1,5 @@
-import { ChallengeInMemoryRepository } from '../../../infra/challenge/challenge.inMemoryRepository';
-import { HabbitInMemoryRepository } from '../../../infra/habbit/habbit.inMemoryRepository';
+import { ChallengeInMemoryRepository } from '../../../infra/repository/challenge/challenge.inMemoryRepository';
+import { HabbitInMemoryRepository } from '../../../infra/repository/habbit/habbit.inMemoryRepository';
 import { HabbitMother } from '../../../test/habbit/habbitMother';
 import { CreateChallengeCommand } from './createChallenge.command';
 import { CreateChallengeCommandHandler } from './createChallenge.commandHandler';

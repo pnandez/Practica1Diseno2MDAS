@@ -9,7 +9,7 @@ export class HabbitMother {
   private frequencyAmount: number = 1;
   private completionTime: number = 600;
   private restTime: number = 600;
-  private userId: string;
+  private userId: string = 'userId';
 
   withId(id: string) {
     this.id = id;

@@ -1,4 +1,3 @@
-import { InvalidHabbitDataError } from '../../../domain/habbit/error/incompleteHabbitData.error';
 import { Habbit } from '../../../domain/habbit/habbit';
 import { HabbitInMemoryRepository } from '../../../infra/habbit/habbit.inMemoryRepository';
 import { UserInMemoryRepository } from '../../../infra/user.inMemoryRepository';

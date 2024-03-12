@@ -6,7 +6,7 @@ import { HabbitUserId } from './habbitUserId';
 import { HabbitProgressRecord } from './habbitProgressRecord';
 
 export class Habbit {
-  private progressRecords: HabbitProgressRecord[];
+  readonly progressRecords: HabbitProgressRecord[];
 
   private constructor(
     readonly id: HabbitId,

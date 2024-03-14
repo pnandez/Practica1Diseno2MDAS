@@ -1,7 +1,6 @@
 import { Habbit } from '../../../domain/habbit/habbit';
 import { HabbitInMemoryRepository } from '../../../infra/repository/habbit/habbit.inMemoryRepository';
 import { UserInMemoryRepository } from '../../../infra/repository/user/user.inMemoryRepository';
-import { WearableManufacturer } from '../../../infra/wearable/manufacturer.values';
 import { HabbitMother } from '../../../test/habbit/habbitMother';
 import { UserMother } from '../../../test/user/userMother';
 import { CreateHabbitCommand } from './createHabbit.command';
@@ -34,7 +33,6 @@ describe('CreateHabbitCommandHandler should', () => {
     const createHabbitCommand = createCommandFromHabbit(
       baseHabbit,
       'garminDevice1234',
-      WearableManufacturer.GARMIN,
     );
 
     handler.handle(createHabbitCommand);

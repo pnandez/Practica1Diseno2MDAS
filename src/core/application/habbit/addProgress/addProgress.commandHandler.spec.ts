@@ -2,6 +2,7 @@ import { InvalidProgressRecord } from '../../../domain/habbit/error/invalidProgr
 import { Habbit } from '../../../domain/habbit/habbit';
 import { HabbitInMemoryRepository } from '../../../infra/repository/habbit/habbit.inMemoryRepository';
 import { UserInMemoryRepository } from '../../../infra/repository/user/user.inMemoryRepository';
+import { GarminWearable } from '../../../infra/wearable/garminWearable.service';
 import { HabbitMother } from '../../../test/habbit/habbitMother';
 import { AddProgressCommand } from './addProgress.command';
 import { AddProgressCommandHandler } from './addProgress.commandHandler';
@@ -16,7 +17,19 @@ describe('Add Progress should', () => {
       .build();
     repository.save(createdHabbit);
     const habbitId = createdHabbit.id.toPrimitives();
-    return { handler, repository, userRepository, habbitId };
+    const garminService = new GarminWearable();
+    const handlerWithGarmin = new AddProgressCommandHandler(
+      repository,
+      garminService,
+    );
+    return {
+      handler,
+      repository,
+      userRepository,
+      habbitId,
+      handlerWithGarmin,
+      garminService,
+    };
   };
 
   it('register a progress', () => {
@@ -33,6 +46,22 @@ describe('Add Progress should', () => {
     expect(
       repository.findById(habbitId).progressRecords.length,
     ).toBeGreaterThan(0);
+  });
+
+  it('register a validated progress', () => {
+    const { handlerWithGarmin, repository, habbitId } = prepareScenario();
+
+    const command = new AddProgressCommand(
+      habbitId,
+      1710445506858,
+      'Test progress',
+    );
+
+    handlerWithGarmin.handle(command);
+
+    expect(
+      repository.findById(habbitId).progressRecords.at(-1)?.validated,
+    ).toBeTruthy();
   });
 
   it('throw an error if the habbit does not exist', () => {

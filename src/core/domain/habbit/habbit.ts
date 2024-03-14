@@ -4,7 +4,7 @@ import { HabbitId } from './habbitId';
 import { HabbitName } from './habbitName';
 import { HabbitUserId } from './habbitUserId';
 import { HabbitProgressRecord } from './habbitProgressRecord';
-import { HabbitWearable } from './habbitWearable';
+import { WearableService } from '../wearable/wearable.service';
 
 export class Habbit {
   readonly progressRecords: HabbitProgressRecord[];
@@ -15,18 +15,22 @@ export class Habbit {
     readonly description: HabbitDescription,
     readonly frequency: HabbitFrequency,
     readonly userId: HabbitUserId,
-    readonly habbitWearable: HabbitWearable,
+    readonly wearableId: string,
     readonly creationDate: Date,
     readonly updateDate: Date,
   ) {
     this.progressRecords = [];
   }
 
-  recordProgress(date: number, observations: string): void {
+  recordProgress(
+    date: number,
+    observations: string,
+    wearableService?: WearableService,
+  ): void {
     const record = HabbitProgressRecord.create(
       date,
       observations,
-      this.habbitWearable?.isProgressValid(date) ?? false,
+      wearableService?.validateProgress(this.wearableId, date),
     );
 
     this.progressRecords.push(record);
@@ -41,7 +45,7 @@ export class Habbit {
     completionTime: number,
     restTime: number,
     userId: string,
-    habbitWearable?: HabbitWearable,
+    habbitWearable?: string,
   ): Habbit {
     return new Habbit(
       HabbitId.create(id),
@@ -69,7 +73,12 @@ export class Habbit {
     completionTime: number;
     restTime: number;
     userId: string;
-    progressRecords: { date: number; observations: string }[];
+    wearableId: string;
+    progressRecords: {
+      date: number;
+      observations: string;
+      validated?: boolean;
+    }[];
   } {
     return {
       id: this.id.toPrimitives(),
@@ -77,7 +86,7 @@ export class Habbit {
       description: this.description.toPrimitives(),
       ...this.frequency.toPrimitives(),
       userId: this.userId.toPrimitives(),
-      ...this.habbitWearable?.toPrimitives(),
+      wearableId: this.wearableId,
       progressRecords: this.progressRecords.map((record) =>
         record.toPrimitives(),
       ),

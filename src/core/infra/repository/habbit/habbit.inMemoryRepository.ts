@@ -1,11 +1,11 @@
-import { HabbitNotFoundError } from '../../domain/habbit/error/habbitNotfFound.Error';
-import { Habbit } from '../../domain/habbit/habbit';
-import { HabbitRepository } from '../../domain/habbit/habbit.repository';
-import { HabbitName } from '../../domain/habbit/habbitName';
-import { HabbitUserId } from '../../domain/habbit/habbitUserId';
+import { HabbitNotFoundError } from '../../../domain/habbit/error/habbitNotfFound.Error';
+import { Habbit } from '../../../domain/habbit/habbit';
+import { HabbitRepository } from '../../../domain/habbit/habbit.repository';
+import { HabbitName } from '../../../domain/habbit/habbitName';
+import { HabbitUserId } from '../../../domain/habbit/habbitUserId';
 
 export class HabbitInMemoryRepository implements HabbitRepository {
-  habbits: Habbit[] = [];
+  private habbits: Habbit[] = [];
 
   save(user: Habbit): void {
     this.habbits.push(user);
@@ -35,6 +35,10 @@ export class HabbitInMemoryRepository implements HabbitRepository {
     return this.habbits.filter((habbit) =>
       habbit.userId.equals(HabbitUserId.create(userId)),
     );
+  }
+
+  exists(id: string): boolean {
+    return this.habbits.some((h) => h.id.equals(id));
   }
 
   withHabbits(habbits: Habbit[]) {

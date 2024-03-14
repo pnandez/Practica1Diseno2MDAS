@@ -4,9 +4,10 @@ import { HabbitId } from './habbitId';
 import { HabbitName } from './habbitName';
 import { HabbitUserId } from './habbitUserId';
 import { HabbitProgressRecord } from './habbitProgressRecord';
+import { WearableService } from '../wearable/wearable.service';
 
 export class Habbit {
-  private progressRecords: HabbitProgressRecord[];
+  readonly progressRecords: HabbitProgressRecord[];
 
   private constructor(
     readonly id: HabbitId,
@@ -14,14 +15,23 @@ export class Habbit {
     readonly description: HabbitDescription,
     readonly frequency: HabbitFrequency,
     readonly userId: HabbitUserId,
+    readonly wearableId: string,
     readonly creationDate: Date,
     readonly updateDate: Date,
   ) {
     this.progressRecords = [];
   }
 
-  recordProgress(date: number, observations: string): void {
-    const record = HabbitProgressRecord.create(date, observations);
+  recordProgress(
+    date: number,
+    observations: string,
+    wearableService?: WearableService,
+  ): void {
+    const record = HabbitProgressRecord.create(
+      date,
+      observations,
+      wearableService?.validateProgress(this.wearableId, date),
+    );
 
     this.progressRecords.push(record);
   }
@@ -35,6 +45,7 @@ export class Habbit {
     completionTime: number,
     restTime: number,
     userId: string,
+    habbitWearable?: string,
   ): Habbit {
     return new Habbit(
       HabbitId.create(id),
@@ -47,6 +58,7 @@ export class Habbit {
         restTime,
       ),
       HabbitUserId.create(userId),
+      habbitWearable,
       new Date(),
       new Date(),
     );
@@ -61,7 +73,12 @@ export class Habbit {
     completionTime: number;
     restTime: number;
     userId: string;
-    progressRecords: { date: number; observations: string }[];
+    wearableId: string;
+    progressRecords: {
+      date: number;
+      observations: string;
+      validated?: boolean;
+    }[];
   } {
     return {
       id: this.id.toPrimitives(),
@@ -69,6 +86,7 @@ export class Habbit {
       description: this.description.toPrimitives(),
       ...this.frequency.toPrimitives(),
       userId: this.userId.toPrimitives(),
+      wearableId: this.wearableId,
       progressRecords: this.progressRecords.map((record) =>
         record.toPrimitives(),
       ),

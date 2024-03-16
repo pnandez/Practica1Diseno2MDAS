@@ -1,4 +1,4 @@
-import { HabbitNotFoundError } from '../../../domain/habbit/error/habbitNotfFound.Error';
+import { HabbitNotFoundError } from '../../../domain/habbit/error/habbitNotfFound.error';
 import { HabbitRepository } from '../../../domain/habbit/habbit.repository';
 import { WearableService } from '../../../domain/wearable/wearable.service';
 import { AddProgressCommand } from './addProgress.command';

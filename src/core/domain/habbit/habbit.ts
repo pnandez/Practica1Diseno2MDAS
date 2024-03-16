@@ -5,9 +5,14 @@ import { HabbitName } from './habbitName';
 import { HabbitUserId } from './habbitUserId';
 import { HabbitProgressRecord } from './habbitProgressRecord';
 import { WearableService } from '../wearable/wearable.service';
+import { HabbitReminder } from './habbitReminder';
+import { DuplicateReminderError } from './error/duplicateReminder.error';
+import { MaximumHabbitRemindersReachedError } from './error/maximumHabbitRemindersReached.error';
 
 export class Habbit {
   readonly progressRecords: HabbitProgressRecord[];
+  readonly reminders: HabbitReminder[];
+  private readonly maximumReminderCount: number = 3;
 
   private constructor(
     readonly id: HabbitId,
@@ -20,6 +25,7 @@ export class Habbit {
     readonly updateDate: Date,
   ) {
     this.progressRecords = [];
+    this.reminders = [];
   }
 
   recordProgress(
@@ -34,6 +40,34 @@ export class Habbit {
     );
 
     this.progressRecords.push(record);
+  }
+
+  addReminder(
+    id: string,
+    message: string,
+    isActive: boolean,
+    hourToNotify: number,
+  ) {
+    if (this.reminders.length >= this.maximumReminderCount) {
+      throw MaximumHabbitRemindersReachedError.withHabbitName(
+        this.name.toPrimitives(),
+      );
+    }
+
+    if (this.reminders.some((r) => r.hourToNotify.hour === hourToNotify)) {
+      throw DuplicateReminderError.withHourAndHabbitName(
+        hourToNotify,
+        this.name.toPrimitives(),
+      );
+    }
+    const newReminder = HabbitReminder.create(
+      id,
+      message,
+      isActive,
+      hourToNotify,
+    );
+
+    this.reminders.push(newReminder);
   }
 
   public static create(

@@ -1,6 +1,6 @@
 import { Challenge } from '../../../domain/challenge/challenge';
 import { ChallengeRepository } from '../../../domain/challenge/challenge.repository';
-import { HabbitNotFoundError } from '../../../domain/habbit/error/habbitNotfFound.Error';
+import { HabbitNotFoundError } from '../../../domain/habbit/error/habbitNotfFound.error';
 import { HabbitRepository } from '../../../domain/habbit/habbit.repository';
 import { CreateChallengeCommand } from './createChallenge.command';
 

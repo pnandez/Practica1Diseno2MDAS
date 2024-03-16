@@ -7,6 +7,8 @@ export interface HabbitRepository {
 
   findById(id: string): Habbit;
 
+  findByIdOrException(id: string): Habbit;
+
   findAllByUserId(userId: string): Habbit[];
 
   exists(id: string): boolean;

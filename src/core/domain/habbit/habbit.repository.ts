@@ -3,9 +3,9 @@ import { Habbit } from './habbit';
 export interface HabbitRepository {
   save(habbit: Habbit);
 
-  findByName(name: string): Habbit;
+  findByName(name: string): Habbit | undefined;
 
-  findById(id: string): Habbit;
+  findById(id: string): Habbit | undefined;
 
   findByIdOrException(id: string): Habbit;
 

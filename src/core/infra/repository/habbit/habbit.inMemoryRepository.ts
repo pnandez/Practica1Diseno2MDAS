@@ -20,7 +20,7 @@ export class HabbitInMemoryRepository implements HabbitRepository {
     );
   }
 
-  findById(id: string): Habbit {
+  findById(id: string): Habbit | undefined {
     return this.habbits.find((habbit) => habbit.id.equals(id));
   }
 

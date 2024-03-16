@@ -1,4 +1,4 @@
-import { User } from 'src/core/domain/user/user';
+import { User } from '../../../domain/user/user';
 import { UserRepository } from '../../../domain/user/user.repository';
 
 export class UserInMemoryRepository implements UserRepository {
@@ -12,7 +12,7 @@ export class UserInMemoryRepository implements UserRepository {
     return this.users.find((user) => user.username === username);
   }
 
-  findById(id: string): User {
+  findById(id: string): User | undefined {
     return this.users.find((user) => user.id === id);
   }
 

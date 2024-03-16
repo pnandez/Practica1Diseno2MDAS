@@ -55,13 +55,13 @@ describe('CreateHabbitCommandHandler should', () => {
 
     const noNameCommand = CreateHabbitCommand.fromObject({
       id: 'id',
-      name: null,
       description: 'description',
       frequencyType: 'day',
       frequencyAmount: 1,
       completionTime: 1,
       restTime: 1,
       userId: user.id,
+      name: null,
     });
 
     expect(() => handler.handle(noNameCommand)).toThrow(

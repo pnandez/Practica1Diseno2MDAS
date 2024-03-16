@@ -1,5 +1,6 @@
 import { InvalidProgressRecord } from '../../../domain/habbit/error/invalidProgressRecord.error';
 import { Habbit } from '../../../domain/habbit/habbit';
+import { EventStore } from '../../../infra/events/eventStore';
 import { HabbitInMemoryRepository } from '../../../infra/repository/habbit/habbit.inMemoryRepository';
 import { UserInMemoryRepository } from '../../../infra/repository/user/user.inMemoryRepository';
 import { GarminWearable } from '../../../infra/wearable/garminWearable.service';
@@ -9,9 +10,14 @@ import { AddProgressCommandHandler } from './addProgress.commandHandler';
 
 describe('Add Progress should', () => {
   const prepareScenario = () => {
+    const eventStore = new EventStore();
     const repository = new HabbitInMemoryRepository();
     const userRepository = new UserInMemoryRepository();
-    const handler = new AddProgressCommandHandler(repository);
+    const handler = new AddProgressCommandHandler(
+      repository,
+      undefined,
+      eventStore,
+    );
     const createdHabbit: Habbit = new HabbitMother()
       .withUserId('userId')
       .build();
@@ -29,6 +35,7 @@ describe('Add Progress should', () => {
       habbitId,
       handlerWithGarmin,
       garminService,
+      eventStore,
     };
   };
 
@@ -44,7 +51,7 @@ describe('Add Progress should', () => {
     handler.handle(command);
 
     expect(
-      repository.findById(habbitId).progressRecords.length,
+      repository.findById(habbitId)?.progressRecords.length,
     ).toBeGreaterThan(0);
   });
 
@@ -60,7 +67,7 @@ describe('Add Progress should', () => {
     handlerWithGarmin.handle(command);
 
     expect(
-      repository.findById(habbitId).progressRecords.at(-1)?.validated,
+      repository.findById(habbitId)?.progressRecords.at(-1)?.validated,
     ).toBeTruthy();
   });
 
@@ -103,5 +110,19 @@ describe('Add Progress should', () => {
     expect(() => handler.handle(command)).toThrow(
       InvalidProgressRecord.withIncompleteDataIntroduced('date'),
     );
+  });
+
+  it('publish an recorded progress event', () => {
+    const { handler, habbitId, eventStore } = prepareScenario();
+
+    const command = new AddProgressCommand(
+      habbitId,
+      Date.now(),
+      'Test progress',
+    );
+
+    handler.handle(command);
+
+    expect(eventStore.events.length).toBeGreaterThan(0);
   });
 });

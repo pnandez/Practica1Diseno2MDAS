@@ -28,11 +28,11 @@ describe('create Reminder should', () => {
 
     const savedHabbit = habbitRepository.findById(habbitId);
 
-    expect(savedHabbit.reminders.at(0).hourToNotify.hour).toBe(
+    expect(savedHabbit?.reminders.at(0)?.hourToNotify.hour).toBe(
       command.hourToNotify,
     );
-    expect(savedHabbit.reminders.at(0).id).toBe(command.id);
-    expect(savedHabbit.reminders.at(0).message).toBe(command.message);
+    expect(savedHabbit?.reminders.at(0)?.id).toBe(command.id);
+    expect(savedHabbit?.reminders.at(0)?.message).toBe(command.message);
   });
 
   it('throw error if habbit is not found', () => {

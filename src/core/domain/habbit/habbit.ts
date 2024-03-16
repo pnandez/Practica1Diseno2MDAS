@@ -8,11 +8,15 @@ import { WearableService } from '../wearable/wearable.service';
 import { HabbitReminder } from './habbitReminder';
 import { DuplicateReminderError } from './error/duplicateReminder.error';
 import { MaximumHabbitRemindersReachedError } from './error/maximumHabbitRemindersReached.error';
+import { AggregateRoot } from '../shared/aggregateRoot';
+import { RegisteredProgressEvent } from './events/registeredProgress.event';
 
-export class Habbit {
+export class Habbit extends AggregateRoot {
   readonly progressRecords: HabbitProgressRecord[];
   readonly reminders: HabbitReminder[];
   private readonly maximumReminderCount: number = 3;
+  private creationDate: Date;
+  private updateDate: Date;
 
   private constructor(
     readonly id: HabbitId,
@@ -20,12 +24,13 @@ export class Habbit {
     readonly description: HabbitDescription,
     readonly frequency: HabbitFrequency,
     readonly userId: HabbitUserId,
-    readonly wearableId: string,
-    readonly creationDate: Date,
-    readonly updateDate: Date,
+    readonly wearableId?: string,
   ) {
+    super();
     this.progressRecords = [];
     this.reminders = [];
+    this.creationDate = new Date();
+    this.updateDate = new Date();
   }
 
   recordProgress(
@@ -36,10 +41,20 @@ export class Habbit {
     const record = HabbitProgressRecord.create(
       date,
       observations,
-      wearableService?.validateProgress(this.wearableId, date),
+      this.wearableId &&
+        wearableService?.validateProgress(this.wearableId, date),
     );
 
     this.progressRecords.push(record);
+
+    this.recordEvent(
+      RegisteredProgressEvent.create(
+        this.id.toPrimitives(),
+        date,
+        this.id.toPrimitives(),
+      ),
+    );
+    this.updateDate = new Date();
   }
 
   addReminder(
@@ -93,8 +108,6 @@ export class Habbit {
       ),
       HabbitUserId.create(userId),
       habbitWearable,
-      new Date(),
-      new Date(),
     );
   }
 
@@ -107,7 +120,7 @@ export class Habbit {
     completionTime: number;
     restTime: number;
     userId: string;
-    wearableId: string;
+    wearableId?: string;
     progressRecords: {
       date: number;
       observations: string;

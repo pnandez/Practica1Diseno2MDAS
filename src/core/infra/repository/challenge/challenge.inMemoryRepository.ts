@@ -7,4 +7,16 @@ export class ChallengeInMemoryRepository implements ChallengeRepository {
   save(challenge: Challenge) {
     this.challenges.push(challenge);
   }
+
+  update(challenge: Challenge) {
+    const index = this.challenges.findIndex((c) => c.id === challenge.id);
+    if (index === -1) {
+      return;
+    }
+    this.challenges[index] = challenge;
+  }
+
+  findAllByHabbitId(habbitId: string): Challenge[] {
+    return this.challenges.filter((c) => c.habbitId === habbitId);
+  }
 }

@@ -9,7 +9,9 @@ import { HabbitReminder } from './habbitReminder';
 import { DuplicateReminderError } from './error/duplicateReminder.error';
 import { MaximumHabbitRemindersReachedError } from './error/maximumHabbitRemindersReached.error';
 import { AggregateRoot } from '../shared/aggregateRoot';
-import { RegisteredProgressEvent } from './events/registeredProgress.event';
+import { RegisteredProgressEvent } from './events/registerProgress/registeredProgress.event';
+import { HabbitStatus } from './habbitStatus';
+import { SuspendHabbitEvent } from './events/suspendHabbit/suspendHabbit.event';
 
 export class Habbit extends AggregateRoot {
   readonly progressRecords: HabbitProgressRecord[];
@@ -17,6 +19,7 @@ export class Habbit extends AggregateRoot {
   private readonly maximumReminderCount: number = 3;
   private creationDate: Date;
   private updateDate: Date;
+  private status: HabbitStatus;
 
   private constructor(
     readonly id: HabbitId,
@@ -31,6 +34,11 @@ export class Habbit extends AggregateRoot {
     this.reminders = [];
     this.creationDate = new Date();
     this.updateDate = new Date();
+    this.status = HabbitStatus.available();
+  }
+
+  get currentStatus() {
+    return this.status.toPrimitive();
   }
 
   recordProgress(
@@ -83,6 +91,14 @@ export class Habbit extends AggregateRoot {
     );
 
     this.reminders.push(newReminder);
+  }
+
+  suspend() {
+    this.status = HabbitStatus.suspended();
+
+    this.recordEvent(
+      SuspendHabbitEvent.create(this.id.toPrimitives(), this.id.toPrimitives()),
+    );
   }
 
   public static create(

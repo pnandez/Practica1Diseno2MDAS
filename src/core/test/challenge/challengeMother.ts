@@ -8,6 +8,7 @@ export class ChallengeMother {
   private numberOfTimesToRepeatHabbit: number = 1;
   private startDate: number = Date.now() - 1000;
   private limitDate: number = Date.now();
+  private status: string;
 
   withId(id: string) {
     this.id = id;
@@ -39,6 +40,11 @@ export class ChallengeMother {
     return this;
   }
 
+  withStatus(status: string) {
+    this.status = status;
+    return this;
+  }
+
   build(): Challenge {
     return Challenge.create(
       this.id,
@@ -47,6 +53,7 @@ export class ChallengeMother {
       this.numberOfTimesToRepeatHabbit,
       this.startDate,
       this.limitDate,
+      this.status,
     );
   }
 

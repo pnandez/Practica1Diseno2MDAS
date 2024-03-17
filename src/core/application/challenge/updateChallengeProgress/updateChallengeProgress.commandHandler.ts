@@ -9,7 +9,6 @@ export class UpdateChallengeProgressCommandHandler {
       command.habbitId,
     );
 
-    console.log(challenges);
     challenges.forEach((challenge) => {
       challenge.newProgressRegistered(command.progressDate);
       this.challengeRepository.update(challenge);

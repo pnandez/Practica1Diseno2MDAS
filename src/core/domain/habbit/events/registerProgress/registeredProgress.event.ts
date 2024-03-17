@@ -1,4 +1,4 @@
-import { BaseEvent } from '../../shared/baseEvent';
+import { BaseEvent } from '../../../shared/baseEvent';
 import { RegisteredProgressPayload } from './registeredProgress.eventPayload';
 
 export class RegisteredProgressEvent extends BaseEvent<RegisteredProgressPayload> {

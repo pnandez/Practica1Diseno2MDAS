@@ -1,4 +1,4 @@
-import { InvalidDescriptionError } from './error/invalidDescription.Error';
+import { InvalidDescriptionError } from './error/invalidDescription.error';
 
 export class ChallengeDescription {
   constructor(readonly description: string) {}

@@ -6,4 +6,6 @@ export interface ChallengeRepository {
   update(challenge: Challenge);
 
   findAllByHabbitId(habbitId: string): Challenge[];
+
+  findByIdOrException(id: string): Challenge;
 }

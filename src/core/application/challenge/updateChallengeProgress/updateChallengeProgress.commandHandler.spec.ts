@@ -37,7 +37,7 @@ describe('update challenge progress should', () => {
 
     const command = new UpdateChallengeProgressCommand(
       habbit.id.toPrimitives(),
-      startDate + 500,
+      startDate + 5000,
     );
 
     handler.handle(command);

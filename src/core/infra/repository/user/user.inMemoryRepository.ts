@@ -1,11 +1,16 @@
-import { User } from '../../../domain/user/user';
-import { UserRepository } from '../../../domain/user/user.repository';
+import { User } from '@domain/user/user';
+import { UserRepository } from '@domain/user/user.repository';
 
 export class UserInMemoryRepository implements UserRepository {
   private users: User[] = [];
 
   save(user: User): void {
     this.users.push(user);
+  }
+
+  update(user: User): void {
+    const index = this.users.findIndex((u) => u.id === user.id);
+    this.users[index] = user;
   }
 
   findByUsername(username: string): User | undefined {

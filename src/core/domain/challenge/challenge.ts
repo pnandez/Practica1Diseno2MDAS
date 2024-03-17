@@ -1,10 +1,13 @@
+import { Habbit } from '../habbit/habbit';
+import { AggregateRoot } from '../shared/aggregateRoot';
 import { ChallengeDescription } from './challengeDescription';
 import { ChallengeStatus } from './challengeStatus';
 import { IncompatibleStatusError } from './error/incompatibleStatus.error';
 import { InvalidLimitDate } from './error/invalidLimitDate.error';
 import { ProgressOutsideDateLimits } from './error/progressOutsideLimits.error';
+import { ChallengeCompletedEvent } from './events/challengeCompleted/challengeCompleted.event';
 
-export class Challenge {
+export class Challenge extends AggregateRoot {
   private remainingTimesToRepeatHabbit: number = 0;
   private status: ChallengeStatus;
 
@@ -17,6 +20,7 @@ export class Challenge {
     readonly limitDate: Date,
     private readonly inputStatus?: string,
   ) {
+    super();
     this.remainingTimesToRepeatHabbit = numberOfTimesToRepeatHabbit;
     this.status =
       ((inputStatus &&
@@ -59,7 +63,7 @@ export class Challenge {
     );
   }
 
-  newProgressRegistered(date: number) {
+  newProgressRegistered(date: number, habbit: Habbit) {
     if (
       !this.status?.isPending() ||
       date < this.startDate.valueOf() ||
@@ -70,6 +74,14 @@ export class Challenge {
 
     if (this.remainingTimesToRepeatHabbit === 1) {
       this.status = ChallengeStatus.completed();
+      this.recordEvent(
+        ChallengeCompletedEvent.create(
+          this.id,
+          this.id,
+          habbit.userId.toPrimitives(),
+          Date.now(),
+        ),
+      );
     }
 
     this.remainingTimesToRepeatHabbit -= 1;

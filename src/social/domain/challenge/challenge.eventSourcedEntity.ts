@@ -3,20 +3,27 @@ import { EventSourcedEntity } from '../shared/eventSourcedEntity';
 import { Payload } from '../shared/payload';
 import { ChallengeState } from './challenge.state';
 import { ChallengeStartedEvent } from './event/ChallengeStarted.event';
+import { UsersAddedEvent } from './event/UsersAdded.event';
 
 export class Challenge extends EventSourcedEntity {
-  private state: ChallengeState = ChallengeState.createEmpty();
+  private state: ChallengeState;
 
   constructor(stream?: Array<BaseEvent<Payload>>) {
     super(stream);
   }
 
   protected when(event: BaseEvent<Payload>): void {
+    if (this.state === undefined) {
+      this.state = ChallengeState.createEmpty();
+    }
     switch (event.type) {
       case ChallengeStartedEvent.Type:
         this.state = this.state.whenChallengeCreated(
           event as ChallengeStartedEvent,
         );
+        break;
+      case UsersAddedEvent.Type:
+        this.state = this.state.whenUsersAdded(event as UsersAddedEvent);
         break;
     }
   }
@@ -72,6 +79,11 @@ export class Challenge extends EventSourcedEntity {
         ownerUserId,
       ),
     );
+  }
+
+  addUsers(userIds: string[]) {
+    console.log(this.state);
+    this.apply(UsersAddedEvent.with(this.state.getId(), userIds));
   }
 
   isFinished(): boolean {

@@ -1,10 +1,9 @@
 import { ChallengeCost } from './challengeCost';
 import { ChallengeStatus } from './challengeStatus';
 import { ChallengeStartedEvent } from './event/ChallengeStarted.event';
+import { UsersAddedEvent } from './event/UsersAdded.event';
 
 export class ChallengeState {
-  private readonly joinedUsers: string[] = [];
-
   private constructor(
     private readonly id: string,
     private readonly habbitId: string,
@@ -15,9 +14,8 @@ export class ChallengeState {
     private readonly deadline: Date,
     private readonly ownerUserId: string,
     private readonly status: ChallengeStatus,
-  ) {
-    this.joinedUsers.push(ownerUserId);
-  }
+    private readonly joinedUsers: string[] = [ownerUserId],
+  ) {}
 
   static createEmpty() {
     return new ChallengeState(
@@ -47,7 +45,26 @@ export class ChallengeState {
     );
   }
 
+  whenUsersAdded(event: UsersAddedEvent) {
+    return new ChallengeState(
+      this.id,
+      this.habbitId,
+      this.target,
+      this.partner,
+      this.project,
+      this.cost,
+      this.deadline,
+      this.ownerUserId,
+      ChallengeStatus.started(),
+      event.payload.users,
+    );
+  }
+
   isFinished(): boolean {
     return this.status.isFinished();
+  }
+
+  getId() {
+    return this.id;
   }
 }

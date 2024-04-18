@@ -1,6 +1,7 @@
 import { ChallengeCost } from './challengeCost';
 import { ChallengeStatus } from './challengeStatus';
 import { ChallengeStartedEvent } from './event/ChallengeStarted.event';
+import { ProgressRegisteredEvent } from './event/ProgressRegistered.event';
 import { UsersAddedEvent } from './event/UsersAdded.event';
 
 export class ChallengeState {
@@ -15,6 +16,7 @@ export class ChallengeState {
     private readonly ownerUserId: string,
     private readonly status: ChallengeStatus,
     private readonly joinedUsers: string[] = [ownerUserId],
+    private readonly progress: number = 0,
   ) {}
 
   static createEmpty() {
@@ -60,11 +62,51 @@ export class ChallengeState {
     );
   }
 
+  whenProgressRegistered(event: ProgressRegisteredEvent) {
+    const isTargetReached =
+      this.progress + event.payload.progress >= this.target;
+    if (isTargetReached && this.status.isStarted()) {
+      return new ChallengeState(
+        this.id,
+        this.habbitId,
+        this.target,
+        this.partner,
+        this.project,
+        this.cost,
+        this.deadline,
+        this.ownerUserId,
+        ChallengeStatus.achieved(),
+        this.joinedUsers,
+        this.progress + event.payload.progress,
+      );
+    }
+    return new ChallengeState(
+      this.id,
+      this.habbitId,
+      this.target,
+      this.partner,
+      this.project,
+      this.cost,
+      this.deadline,
+      this.ownerUserId,
+      this.status,
+      this.joinedUsers,
+      this.progress + event.payload.progress,
+    );
+  }
+
   isFinished(): boolean {
     return this.status.isFinished();
   }
 
   getId() {
     return this.id;
+  }
+
+  getRemainingProgress(): number {
+    if (this.isFinished()) {
+      return 0;
+    }
+    return this.target - this.progress;
   }
 }

@@ -3,6 +3,7 @@ import { EventSourcedEntity } from '../shared/eventSourcedEntity';
 import { Payload } from '../shared/payload';
 import { ChallengeState } from './challenge.state';
 import { ChallengeStartedEvent } from './event/ChallengeStarted.event';
+import { ProgressRegisteredEvent } from './event/ProgressRegistered.event';
 import { UsersAddedEvent } from './event/UsersAdded.event';
 
 export class Challenge extends EventSourcedEntity {
@@ -25,6 +26,10 @@ export class Challenge extends EventSourcedEntity {
       case UsersAddedEvent.Type:
         this.state = this.state.whenUsersAdded(event as UsersAddedEvent);
         break;
+      case ProgressRegisteredEvent.Type:
+        this.state = this.state.whenProgressRegistered(
+          event as ProgressRegisteredEvent,
+        );
     }
   }
 
@@ -82,11 +87,18 @@ export class Challenge extends EventSourcedEntity {
   }
 
   addUsers(userIds: string[]) {
-    console.log(this.state);
     this.apply(UsersAddedEvent.with(this.state.getId(), userIds));
   }
 
   isFinished(): boolean {
     return this.state?.isFinished();
+  }
+
+  remainingProgress(): number {
+    return this.state.getRemainingProgress();
+  }
+
+  registerProgress(progress: number) {
+    this.apply(ProgressRegisteredEvent.with(this.state.getId(), progress));
   }
 }

@@ -19,6 +19,16 @@ export class ChallengeMother {
     return this;
   }
 
+  withTarget(target: number) {
+    this.target = target;
+    return this;
+  }
+
+  withHabbitId(habbitId: string) {
+    this.habbitId = habbitId;
+    return this;
+  }
+
   withChallengeStarted() {
     this.events.push(
       ChallengeStartedEvent.with(

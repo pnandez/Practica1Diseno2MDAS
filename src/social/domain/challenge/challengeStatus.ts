@@ -27,4 +27,8 @@ export class ChallengeStatus {
       this.status === ChallengeStatus.failedStatus
     );
   }
+
+  isStarted(): boolean {
+    return this.status === ChallengeStatus.startedStatus;
+  }
 }

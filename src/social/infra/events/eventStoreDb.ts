@@ -1,9 +1,9 @@
 import { ChallengeRepository } from 'social/domain/challenge/challenge.repository';
 import { EventPublisher } from '../../application/shared/eventPublisher';
 import { BaseEvent } from '../../domain/shared/baseEvent';
-import { Challenge } from 'social/domain/challenge/Challenge.eventSourcedEntity';
-import { ChallengeNotFoundError } from 'social/domain/challenge/error/ChallengeNotFound.error';
 import { ReadModel } from 'social/domain/shared/readModel';
+import { ChallengeNotFoundError } from 'social/domain/challenge/error/ChallengeNotFound.error';
+import { Challenge } from 'social/domain/challenge/challenge.eventSourcedEntity';
 
 export class EventStoreDb implements EventPublisher, ChallengeRepository {
   readonly events: BaseEvent<any>[] = [];

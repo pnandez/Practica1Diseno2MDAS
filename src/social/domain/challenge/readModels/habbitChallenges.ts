@@ -1,4 +1,1 @@
-export type ChallengesOfAHabbit = {
-  habbitId: string;
-  challengeIds: string[];
-};
+export type ChallengesOfAHabbit = string[];

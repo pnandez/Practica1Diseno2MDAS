@@ -1,9 +1,9 @@
-import { Challenge } from '../../../domain/challenge/Challenge.eventSourcedEntity';
 import { AddChallengeCommand } from './addChallenge.command';
 import { InvalidUserIdError } from 'social/domain/challenge/error/InvalidParameters.error';
 import { CoreQueryService } from 'social/domain/shared/core.service';
 import { InvalidHabbitIdError } from 'social/domain/challenge/error/InvalidHabbitId.error';
 import { EventPublisher } from 'social/application/shared/eventPublisher';
+import { Challenge } from 'social/domain/challenge/challenge.eventSourcedEntity';
 
 export class AddChallengeCommandHandler {
   constructor(

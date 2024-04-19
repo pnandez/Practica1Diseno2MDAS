@@ -2,12 +2,17 @@ import { ChallengeStartedEvent } from 'social/domain/challenge/event/ChallengeSt
 import { ChallengesPerHabbit } from 'social/domain/challenge/readModels/challengesPerHabbit.readModel';
 import { ChallengesOfAHabbit } from 'social/domain/challenge/readModels/habbitChallenges';
 
+type ChallengeIdsByHabbit = {
+  habbitId: string;
+  challengeIds: string[];
+};
+
 export class ChallengesPerHabbitInMemoryReadModel
   implements ChallengesPerHabbit
 {
-  readonly data: ChallengesOfAHabbit[] = [];
+  readonly data: ChallengeIdsByHabbit[] = [];
 
-  of(habbitId: string): string[] {
+  of(habbitId: string): ChallengesOfAHabbit {
     return this.data.find((challenges) => challenges.habbitId === habbitId)
       .challengeIds;
   }

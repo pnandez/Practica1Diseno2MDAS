@@ -1,5 +1,5 @@
+import { UserRepository } from '@core/domain/user/user.repository';
 import { CreateAchievementCommand } from './createAchievement.command';
-import { UserRepository } from '@domain/user/user.repository';
 
 export class CreateAchievementCommandHandler {
   constructor(private userRepository: UserRepository) {}

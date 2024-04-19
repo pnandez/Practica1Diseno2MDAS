@@ -31,4 +31,8 @@ export class ChallengeStatus {
   isStarted(): boolean {
     return this.status === ChallengeStatus.startedStatus;
   }
+
+  toPrimitives(): string {
+    return this.status;
+  }
 }

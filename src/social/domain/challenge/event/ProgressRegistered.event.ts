@@ -1,6 +1,7 @@
 import { BaseEvent } from 'social/domain/shared/baseEvent';
 
 export type ProgressRegisteredEventPayload = {
+  challengeId: string;
   progress: number;
 };
 
@@ -15,6 +16,7 @@ export class ProgressRegisteredEvent extends BaseEvent<ProgressRegisteredEventPa
   }
   static with(challengeId: string, progress: number) {
     return new ProgressRegisteredEvent(challengeId, {
+      challengeId,
       progress,
     });
   }
